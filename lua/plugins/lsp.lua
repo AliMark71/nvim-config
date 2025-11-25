@@ -15,7 +15,7 @@ return {
     },
 
     config = function()
-        require("lspconfig").sourcekit.setup {
+        vim.lsp.config("sourcekit", {
             capabilities = {
                 workspace = {
                     didChangeWatchedFiles = {
@@ -23,7 +23,8 @@ return {
                     },
                 },
             },
-        }
+        })
+        vim.lsp.enable("sourcekit")
         vim.api.nvim_create_autocmd('LspAttach', {
             desc = 'LSP Actions',
             callback = function(args)
@@ -31,6 +32,17 @@ return {
                 vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { noremap = true, silent = true })
             end,
         })
+        -- vim.api.nvim_create_autocmd('FileType', {
+        --    pattern = { "swift" },
+        --    callback = function()
+        --        local client = vim.lsp.start({
+        --            name = "sourcekit-lsp",
+        --            cmd = { "sourcekit-lsp" },
+        --        })
+        --        vim.lsp.buf_attach_client(0, client)
+        --    end,
+        -- })
+
 
         require("conform").setup({
             formatters_by_ft = {
@@ -79,7 +91,7 @@ return {
         vim.diagnostic.config({
             -- update_in_insert = true,
             float = {
-                focusable = false,
+                focusable = true,
                 style = "minimal",
                 border = "rounded",
                 source = "always",
